@@ -1,0 +1,19 @@
+{
+  "dataServiceGeneratorVersion": "0.11.2",
+  "appInfo": {
+    "name": "AzureAD Auth",
+    "description": "",
+    "version": "li1uxxag",
+    "id": "ckzs3kdfe83316401s6wi82o6b4",
+    "url": "https://app.amplication.com/ckzs3kdfe83316401s6wi82o6b4",
+    "settings": {
+      "dbHost": "localhost",
+      "dbName": "",
+      "dbPassword": "admin",
+      "dbPort": 5432,
+      "dbUser": "admin",
+      "appId": "ckzs3kdfe83316401s6wi82o6b4",
+      "authProvider": "Jwt"
+    }
+  }
+}
