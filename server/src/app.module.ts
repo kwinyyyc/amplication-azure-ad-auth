@@ -19,7 +19,16 @@ import { GraphQLModule } from "@nestjs/graphql";
     HealthModule,
     SecretsManagerModule,
     MorganModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        ".env.development.local",
+        ".env.development",
+        ".env.uat",
+        ".env.production",
+        ".env",
+      ],
+    }),
     ServeStaticModule.forRootAsync({
       useClass: ServeStaticOptionsService,
     }),
