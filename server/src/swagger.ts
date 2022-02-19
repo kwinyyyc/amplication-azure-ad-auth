@@ -1,21 +1,38 @@
-import { DocumentBuilder } from "@nestjs/swagger";
+import { DocumentBuilder, SwaggerCustomOptions } from "@nestjs/swagger";
 
 export const swaggerPath = "api";
 
 export const swaggerDocumentOptions = new DocumentBuilder()
-  .setTitle("AzureAD Auth")
-  .setDescription(
-    '\n\n## Congratulations! Your application is ready.\n  \nPlease note that all endpoints are secured with JWT Bearer authentication.\nBy default, your app comes with one user with the username "admin" and password "admin".\nLearn more in [our docs](https://docs.amplication.com)'
+  .setTitle("Sample app")
+  .setDescription("Swagger API Doc")
+  .setVersion("V1")
+  .addOAuth2(
+    {
+      type: "oauth2",
+      flows: {
+        authorizationCode: {
+          authorizationUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/authorize`,
+          tokenUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`,
+          scopes: {
+            [process.env.CLIENT_SCOPES as string]: "default scope",
+          },
+        },
+      },
+    },
+    "oauth-swagger"
   )
-  .setVersion("li1uxxag")
-  .addBearerAuth()
   .build();
 
-export const swaggerSetupOptions = {
+export const swaggerSetupOptions: SwaggerCustomOptions = {
   swaggerOptions: {
     persistAuthorization: true,
+    oauth2RedirectUrl: process.env.REDIRECT_URL,
+    oauth: {
+      usePkceWithAuthorizationCodeGrant: true,
+      clientId: process.env.WEB_CLIENT_ID,
+    },
   },
   customCssUrl: "../swagger/swagger.css",
   customfavIcon: "../swagger/favicon.png",
-  customSiteTitle: "AzureAD Auth",
+  customSiteTitle: "Sample app",
 };
