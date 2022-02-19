@@ -1,12 +1,14 @@
 import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
+import { User } from "@prisma/client";
 import { BearerStrategy } from "passport-azure-ad";
 import { UserService } from "src/user/user.service";
 import { AUDIENCE, CLIENT_ID, TENANT_ID } from "../../constants";
 // @ts-ignore
 // eslint-disable-next-line
 import { IAadUser } from "../IAadUser";
+import { UserInfo } from "../UserInfo";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(BearerStrategy, "oauth") {
@@ -25,19 +27,10 @@ export class JwtStrategy extends PassportStrategy(BearerStrategy, "oauth") {
     this.userService = userService;
   }
 
-  async validate(response: IAadUser) {
+  async validate(response: IAadUser): Promise<UserInfo> {
     if (!response) throw new UnauthorizedException();
-    const user = await this.userService.findOne({
-      where: { username: response.email },
-    });
-    if (user) return { response, ...{ roles: user.roles } };
-    const createdUser = await this.userService.create({
-      data: {
-        username: response.email,
-        password: "",
-        roles: ["user"],
-      },
-    });
-    return { response, ...{ roles: createdUser.roles } };
+    const user = await this.userService.findByEmail(response.email);
+    if (!user) throw new UnauthorizedException();
+    return user;
   }
 }
