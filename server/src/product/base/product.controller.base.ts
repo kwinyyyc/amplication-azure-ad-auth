@@ -20,17 +20,17 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
-import { UserService } from "../user.service";
-import { UserCreateInput } from "./UserCreateInput";
-import { UserWhereInput } from "./UserWhereInput";
-import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
-import { UserFindManyArgs } from "./UserFindManyArgs";
-import { UserUpdateInput } from "./UserUpdateInput";
-import { User } from "./User";
+import { ProductService } from "../product.service";
+import { ProductCreateInput } from "./ProductCreateInput";
+import { ProductWhereInput } from "./ProductWhereInput";
+import { ProductWhereUniqueInput } from "./ProductWhereUniqueInput";
+import { ProductFindManyArgs } from "./ProductFindManyArgs";
+import { ProductUpdateInput } from "./ProductUpdateInput";
+import { Product } from "./Product";
 @swagger.ApiBasicAuth()
-export class UserControllerBase {
+export class ProductControllerBase {
   constructor(
-    protected readonly service: UserService,
+    protected readonly service: ProductService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
@@ -41,21 +41,21 @@ export class UserControllerBase {
   )
   @common.Post()
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Product",
     action: "create",
     possession: "any",
   })
-  @swagger.ApiCreatedResponse({ type: User })
+  @swagger.ApiCreatedResponse({ type: Product })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(
-    @common.Body() data: UserCreateInput,
+    @common.Body() data: ProductCreateInput,
     @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<User> {
+  ): Promise<Product> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "create",
       possession: "any",
-      resource: "User",
+      resource: "Product",
     });
     const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
     if (invalidAttributes.length) {
@@ -66,19 +66,15 @@ export class UserControllerBase {
         .map((role: string) => JSON.stringify(role))
         .join(",");
       throw new errors.ForbiddenException(
-        `providing the properties: ${properties} on ${"User"} creation is forbidden for roles: ${roles}`
+        `providing the properties: ${properties} on ${"Product"} creation is forbidden for roles: ${roles}`
       );
     }
     return await this.service.create({
       data: data,
       select: {
         createdAt: true,
-        firstName: true,
         id: true,
-        lastName: true,
-        roles: true,
         updatedAt: true,
-        username: true,
       },
     });
   }
@@ -90,35 +86,31 @@ export class UserControllerBase {
   )
   @common.Get()
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Product",
     action: "read",
     possession: "any",
   })
-  @swagger.ApiOkResponse({ type: [User] })
+  @swagger.ApiOkResponse({ type: [Product] })
   @swagger.ApiForbiddenResponse()
-  @ApiNestedQuery(UserFindManyArgs)
+  @ApiNestedQuery(ProductFindManyArgs)
   async findMany(
     @common.Req() request: Request,
     @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<User[]> {
-    const args = plainToClass(UserFindManyArgs, request.query);
+  ): Promise<Product[]> {
+    const args = plainToClass(ProductFindManyArgs, request.query);
 
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
       possession: "any",
-      resource: "User",
+      resource: "Product",
     });
     const results = await this.service.findMany({
       ...args,
       select: {
         createdAt: true,
-        firstName: true,
         id: true,
-        lastName: true,
-        roles: true,
         updatedAt: true,
-        username: true,
       },
     });
     return results.map((result) => permission.filter(result));
@@ -131,33 +123,29 @@ export class UserControllerBase {
   )
   @common.Get("/:id")
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Product",
     action: "read",
     possession: "own",
   })
-  @swagger.ApiOkResponse({ type: User })
+  @swagger.ApiOkResponse({ type: Product })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Param() params: UserWhereUniqueInput,
+    @common.Param() params: ProductWhereUniqueInput,
     @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<User | null> {
+  ): Promise<Product | null> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
       possession: "own",
-      resource: "User",
+      resource: "Product",
     });
     const result = await this.service.findOne({
       where: params,
       select: {
         createdAt: true,
-        firstName: true,
         id: true,
-        lastName: true,
-        roles: true,
         updatedAt: true,
-        username: true,
       },
     });
     if (result === null) {
@@ -175,24 +163,24 @@ export class UserControllerBase {
   )
   @common.Patch("/:id")
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Product",
     action: "update",
     possession: "any",
   })
-  @swagger.ApiOkResponse({ type: User })
+  @swagger.ApiOkResponse({ type: Product })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
-    @common.Param() params: UserWhereUniqueInput,
+    @common.Param() params: ProductWhereUniqueInput,
     @common.Body()
-    data: UserUpdateInput,
+    data: ProductUpdateInput,
     @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<User | null> {
+  ): Promise<Product | null> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "update",
       possession: "any",
-      resource: "User",
+      resource: "Product",
     });
     const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
     if (invalidAttributes.length) {
@@ -203,7 +191,7 @@ export class UserControllerBase {
         .map((role: string) => JSON.stringify(role))
         .join(",");
       throw new errors.ForbiddenException(
-        `providing the properties: ${properties} on ${"User"} update is forbidden for roles: ${roles}`
+        `providing the properties: ${properties} on ${"Product"} update is forbidden for roles: ${roles}`
       );
     }
     try {
@@ -212,12 +200,8 @@ export class UserControllerBase {
         data: data,
         select: {
           createdAt: true,
-          firstName: true,
           id: true,
-          lastName: true,
-          roles: true,
           updatedAt: true,
-          username: true,
         },
       });
     } catch (error) {
@@ -237,27 +221,23 @@ export class UserControllerBase {
   )
   @common.Delete("/:id")
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Product",
     action: "delete",
     possession: "any",
   })
-  @swagger.ApiOkResponse({ type: User })
+  @swagger.ApiOkResponse({ type: Product })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
-    @common.Param() params: UserWhereUniqueInput
-  ): Promise<User | null> {
+    @common.Param() params: ProductWhereUniqueInput
+  ): Promise<Product | null> {
     try {
       return await this.service.delete({
         where: params,
         select: {
           createdAt: true,
-          firstName: true,
           id: true,
-          lastName: true,
-          roles: true,
           updatedAt: true,
-          username: true,
         },
       });
     } catch (error) {
