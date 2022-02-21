@@ -1,77 +1,21 @@
-import { DocumentBuilder, SwaggerCustomOptions } from "@nestjs/swagger";
+import { DocumentBuilder } from "@nestjs/swagger";
 
 export const swaggerPath = "api";
 
-const swaggerImplicitGrantFlowDocumentOptions = new DocumentBuilder()
-  .setTitle("Sample app")
-  .setDescription("Swagger API Doc")
-  .setVersion("V1")
-  .addOAuth2(
-    {
-      type: "oauth2",
-      flows: {
-        implicit: {
-          authorizationUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/authorize`,
-          tokenUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`,
-          scopes: {
-            [process.env.SCOPES as string]: "default scope",
-          },
-        },
-      },
-    },
-    "oauth-swagger"
+export const swaggerDocumentOptions = new DocumentBuilder()
+  .setTitle("AzureAD Auth")
+  .setDescription(
+    '\n\n## Congratulations! Your application is ready.\n  \nPlease note that all endpoints are secured with JWT Bearer authentication.\nBy default, your app comes with one user with the username "admin" and password "admin".\nLearn more in [our docs](https://docs.amplication.com)'
   )
+  .setVersion("ynp4qur8")
+  .addBearerAuth()
   .build();
 
-const swaggerPkceFlowDocumentOptions = new DocumentBuilder()
-  .setTitle("Sample app")
-  .setDescription("Swagger API Doc")
-  .setVersion("V1")
-  .addOAuth2(
-    {
-      type: "oauth2",
-      flows: {
-        authorizationCode: {
-          authorizationUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/authorize`,
-          tokenUrl: `https://login.microsoftonline.com/${process.env.TENANT_ID}/oauth2/v2.0/token`,
-          scopes: {
-            [process.env.SCOPES as string]: "default scope",
-          },
-        },
-      },
-    },
-    "oauth-swagger"
-  )
-  .build();
-
-const swaggerImplicitGrantFlowSetupOptions: SwaggerCustomOptions = {
+export const swaggerSetupOptions = {
   swaggerOptions: {
     persistAuthorization: true,
-    oauth2RedirectUrl: `${process.env.BACKEND_BASE_URL}/${swaggerPath}/oauth2-redirect.html`,
-    oauth: {
-      clientId: process.env.CLIENT_ID,
-    },
   },
   customCssUrl: "../swagger/swagger.css",
   customfavIcon: "../swagger/favicon.png",
-  customSiteTitle: "Sample app",
+  customSiteTitle: "AzureAD Auth",
 };
-
-const swaggerPkceFlowSetupOptions: SwaggerCustomOptions = {
-  swaggerOptions: {
-    persistAuthorization: true,
-    oauth2RedirectUrl: `${process.env.BACKEND_BASE_URL}/${swaggerPath}/oauth2-redirect.html`,
-    oauth: {
-      usePkceWithAuthorizationCodeGrant: true,
-      clientId: process.env.SWAGGER_CLIENT_ID,
-    },
-  },
-  customCssUrl: "../swagger/swagger.css",
-  customfavIcon: "../swagger/favicon.png",
-  customSiteTitle: "Sample app",
-};
-
-export const swaggerDocumentOptions = swaggerImplicitGrantFlowDocumentOptions;
-export const swaggerSetupOptions = swaggerImplicitGrantFlowSetupOptions;
-// export const swaggerDocumentOptions = swaggerPkceFlowDocumentOptions;
-// export const swaggerSetupOptions = swaggerPkceFlowSetupOptions;

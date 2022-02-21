@@ -8,9 +8,6 @@ import { SecretsManagerService } from "../providers/secrets/secretsManager.servi
 // @ts-ignore
 // eslint-disable-next-line
 import { UserModule } from "../user/user.module";
-import { AadOauthStrategy } from "./aad-oauth/aadOauth.strategy";
-import { AadOauthController } from "./aadOauth.controller";
-import { AadOauthService } from "./aadOauth.service";
 import { AuthController } from "./auth.controller";
 import { AuthResolver } from "./auth.resolver";
 import { AuthService } from "./auth.service";
@@ -50,8 +47,6 @@ import { TokenService } from "./token.service";
   ],
   providers: [
     AuthService,
-    AadOauthService,
-    AadOauthStrategy,
     BasicStrategy,
     PasswordService,
     AuthResolver,
@@ -59,7 +54,7 @@ import { TokenService } from "./token.service";
     jwtSecretFactory,
     TokenService,
   ],
-  controllers: [AuthController, AadOauthController],
-  exports: [AuthService, AadOauthService, PasswordService],
+  controllers: [AuthController],
+  exports: [AuthService, PasswordService],
 })
 export class AuthModule {}

@@ -5,7 +5,6 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import "./login.scss";
-import axios from "axios";
 
 const CLASS_NAME = "login-page";
 
@@ -14,16 +13,11 @@ const Login = ({ theme }: { theme?: object }) => {
   const [password, setPassword] = useState("");
   const login = useLogin();
   const notify = useNotify();
-  const submit = async (e: any) => {
+  const submit = (e: any) => {
     e.preventDefault();
-    var result = await axios
-      .post<string>("https://localhost:3000/api/aad/login")
-      .catch(() => notify("Failed to login"));
-    if (!result) {
-      notify("Failed to login");
-      return;
-    }
-    window.location.replace(result?.data as string);
+    login({ username, password }).catch(() =>
+      notify("Invalid email or password")
+    );
   };
 
   return (
@@ -59,11 +53,7 @@ const Login = ({ theme }: { theme?: object }) => {
               Sign in to a React-Admin client with ready-made forms for creating
               and editing all the data models of your application.
             </div>
-
-            <Button onClick={submit} variant="contained" color="primary">
-              Log in
-            </Button>
-            {/* <form onSubmit={submit}>
+            <form onSubmit={submit}>
               <label>
                 <span>Username</span>
 
@@ -87,7 +77,7 @@ const Login = ({ theme }: { theme?: object }) => {
               <Button type="submit" variant="contained" color="primary">
                 Log in
               </Button>
-            </form> */}
+            </form>
           </div>
           <div className={`${CLASS_NAME}__box`}>
             <img
