@@ -9,14 +9,11 @@ import { UserList } from "./user/UserList";
 import { UserCreate } from "./user/UserCreate";
 import { UserEdit } from "./user/UserEdit";
 import { UserShow } from "./user/UserShow";
-import {
-  createBearerAuthorizationHeader,
-  jwtAuthProvider,
-} from "./auth-provider/ra-auth-jwt";
-import {
-  CREDENTIALS_LOCAL_STORAGE_ITEM,
-  USER_DATA_LOCAL_STORAGE_ITEM,
-} from "./constants";
+import { ProductList } from "./product/ProductList";
+import { ProductCreate } from "./product/ProductCreate";
+import { ProductEdit } from "./product/ProductEdit";
+import { ProductShow } from "./product/ProductShow";
+import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
   const [dataProvider, setDataProvider] = useState<DataProvider | null>(null);
@@ -31,22 +28,6 @@ const App = (): React.ReactElement => {
   }, []);
   if (!dataProvider) {
     return <div>Loading</div>;
-  }
-  const search = window.location.search;
-  const params = new URLSearchParams(search);
-  const userData = params.get("user")
-    ? JSON.parse(params.get("user") as string)
-    : null;
-  if (userData) {
-    localStorage.setItem(
-      CREDENTIALS_LOCAL_STORAGE_ITEM,
-      createBearerAuthorizationHeader(userData.accessToken)
-    );
-    localStorage.setItem(
-      USER_DATA_LOCAL_STORAGE_ITEM,
-      JSON.stringify(userData)
-    );
-    window.history.replaceState(null, "", window.location.pathname);
   }
   return (
     <div className="App">
@@ -64,6 +45,13 @@ const App = (): React.ReactElement => {
           edit={UserEdit}
           create={UserCreate}
           show={UserShow}
+        />
+        <Resource
+          name="Product"
+          list={ProductList}
+          edit={ProductEdit}
+          create={ProductCreate}
+          show={ProductShow}
         />
       </Admin>
     </div>

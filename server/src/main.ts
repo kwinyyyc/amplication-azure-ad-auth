@@ -11,23 +11,11 @@ import {
   // @ts-ignore
   // eslint-disable-next-line
 } from "./swagger";
-import * as fs from "fs";
-import * as path from "path";
 
 const { PORT = 3000 } = process.env;
 
 async function main() {
-  const httpsOptions = {
-    key: fs.readFileSync(
-      path.resolve(__dirname, "../cert/localhost.key"),
-      "utf8"
-    ),
-    cert: fs.readFileSync(
-      path.resolve(__dirname, "../cert/localhost.crt"),
-      "utf8"
-    ),
-  };
-  const app = await NestFactory.create(AppModule, { httpsOptions, cors: true });
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.setGlobalPrefix("api");
   app.useGlobalPipes(
