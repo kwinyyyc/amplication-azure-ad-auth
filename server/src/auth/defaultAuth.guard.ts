@@ -1,3 +1,3 @@
-import { AadOauthGuard } from "./aad-oauth/aadOauth.guard";
+import { JwtAuthGuard } from "./jwt/jwtAuth.guard";
 
-export class DefaultAuthGuard extends AadOauthGuard {}
+export class DefaultAuthGuard extends JwtAuthGuard {}
