@@ -11,9 +11,8 @@ import { UserInfo } from "./UserInfo";
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
   @Mutation(() => UserInfo)
-  async login(@Args() args: LoginArgs): Promise<string> {
-    const authCodeUrl = await this.authService.login();
-    return authCodeUrl;
+  async login(@Args() args: LoginArgs): Promise<UserInfo> {
+    return this.authService.login(args.credentials);
   }
 
   @Query(() => UserInfo)

@@ -8,7 +8,6 @@ import { AuthGuard } from "@nestjs/passport";
 
 @swagger.ApiTags("users")
 @ApiOAuth2([], "oauth-swagger")
-@common.UseGuards(AuthGuard("oauth"))
 @common.Controller("users")
 export class UserController extends UserControllerBase {
   constructor(

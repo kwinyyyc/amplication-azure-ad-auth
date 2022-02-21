@@ -17,7 +17,7 @@ const Login = ({ theme }: { theme?: object }) => {
   const submit = async (e: any) => {
     e.preventDefault();
     var result = await axios
-      .post<string>("https://localhost:3000/api/login")
+      .post<string>("https://localhost:3000/api/aad/login")
       .catch(() => notify("Failed to login"));
     if (!result) {
       notify("Failed to login");

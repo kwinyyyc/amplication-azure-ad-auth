@@ -11,7 +11,7 @@ It consists of two packages:
 You can learn more in the [Amplication documentation](https://docs.amplication.com/guides/getting-started).
 
 ### Azure AD implicit grant flow for swagger
-1. Create application on Azure AD with a "Web" platform, add redirect url "https://localhost:3000/api/redirect"
+1. Create application on Azure AD with a "Web" platform, add redirect url "https://localhost:3000/api/aad/redirect"
 2. Create a client secret under "Certificates & secrets"
 3. in `swagger.ts` use 
 ```ts
@@ -30,7 +30,7 @@ AUDIENCE=api://{{YOUR APP CLIENT ID}}
 ### Azure AD Authorization Code with PKCE Flow for swagger
 1. Create 2 applications on Azure AD. One for UI, one for API
 2. In the API Azure AD application, create a client secret under "Certificates & secrets"
-3. In the API Azure AD application, in a "Web" platform, add redirect url "https://localhost:3000/api/redirect"
+3. In the API Azure AD application, in a "Web" platform, add redirect url "https://localhost:3000/api/aad/redirect"
 4. In "Expose an API" > "Authorized client application", add the UI Azure AD application
 5. in `swagger.ts` use 
 ```ts
